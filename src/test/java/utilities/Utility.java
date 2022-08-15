@@ -26,8 +26,8 @@ public class Utility {
 
 	Reporting report = new Reporting();
 	public static WebDriver driver = null;
-	public ExtentReports extent;
-	public ExtentTest test;
+	public static ExtentReports extent;
+	public static ExtentTest test;
 	
 	public static String excel=null, url = null, txtName = null, txtEmployees = null, dropEmployees = null, txtService = null, dropService = null, checkboxAgree = null, btnSubmit = null, inputEmail = null, inputNumber = null, txtMessage = null, successfulSubmit = null;
 	
@@ -62,10 +62,7 @@ public class Utility {
 		driver.manage().window().maximize();
 		driver.get(url); //Navigating to URL, you can also use navigate().to(URL);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); //Using waits to set the max time to load
-		
-		
-		
-		
+
 		extent = Reports("Report\\MyReport.html");
 		test = Test(extent);
 		
@@ -74,39 +71,20 @@ public class Utility {
 		
 	}
 
-	public String generateRandomValue(int length) {
-
-		//int length = 10;
-		boolean useLetters = false;
-		boolean useNumbers = true;
-		String generatedValue = RandomStringUtils.random(length, useLetters, useNumbers);
-		System.out.println(generatedValue);
-		return generatedValue;
-	}
-
-	public String generateRandomString(int length) {
-
-		//int length = 10;
-		boolean useLetters = true;
-		boolean useNumbers = false;
-		String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
-		System.out.println(generatedString);
-		return generatedString;
-	}
-	
 	public void validate() throws IOException
 	{
+		try{
 		if(driver.findElement(By.xpath(successfulSubmit)).isDisplayed()) {
-			String path = report.Screen(driver);
-			test.log(Status.PASS, "pass");
-			test.pass("pass");
-			test.pass("Screenshot", MediaEntityBuilder.createScreenCaptureFromPath("."+path).build());
-			test.addScreencastFromPath("/Screen.png");
-			test.createNode("My node", "Checking it out.");
+			ExtentLogPass(driver, "Successfully submitted", test, true, "Report\\MyReport");
+			//String path = report.Screen(driver);
+			//test.pass("Screenshot", MediaEntityBuilder.createScreenCaptureFromPath("."+path).build());
+			//test.addScreencastFromPath("/Screen.png");
 		}
 		else {
 			test.log(Status.FAIL, "fail");
 			test.fail("fail");
+		}}catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -126,6 +104,7 @@ public class Utility {
 	
 	 public ExtentTest Test(ExtentReports extent)
 	  {
+
 		  ExtentTest test = extent.createTest("Assessment");
 		  return test;
 	  }
@@ -140,11 +119,6 @@ public class Utility {
 
 			String fileName = takeScreenShot(driver, sMessagePass, sDefaultPath);
 			logger.pass(sMessagePass, MediaEntityBuilder.createScreenCaptureFromBase64String(fileName).build());
-
-			//Comment this line if want to take taskbars
-            /*String fileNames = takeScreenShotTaskBar(driver, sMessagePass, sDefaultPath);
-            logger.pass(sMessagePass, MediaEntityBuilder.createScreenCaptureFromBase64String(fileNames).build());*/
-
 		} else {
 			logger.pass(sMessagePass);
 		}

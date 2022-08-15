@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="TestSuite" thread-count="3" >
+<test name="MyTest">
+<classes>
+<class name="application.VerifyContactDetailsCanBeSubmitted">
+</class>
+</classes>
+</test>
+</suite>
